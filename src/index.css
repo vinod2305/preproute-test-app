@@ -58,6 +58,16 @@
   color: theme('colors.primary.700');
   text-decoration: underline;
 }
+.prose-editor img,
+.question-html img {
+  max-width: 320px;
+  max-height: 240px;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+}
+.prose-editor img.ProseMirror-selectednode {
+  outline: 2px solid theme('colors.primary.400');
+}
 /* Placeholder for empty editor */
 .prose-editor p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);

@@ -124,6 +124,13 @@ export function PreviewPage() {
                   dangerouslySetInnerHTML={{ __html: q.question }}
                 />
               </div>
+              {q.media_url && (
+                <img
+                  src={q.media_url}
+                  alt=""
+                  className="mt-2 max-h-48 rounded-lg border border-gray-200"
+                />
+              )}
               <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {OPTION_KEYS.map((key, idx) => {
                   const isCorrect = q.correct_option === key

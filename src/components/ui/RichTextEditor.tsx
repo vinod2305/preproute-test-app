@@ -1,15 +1,42 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
+import Image from '@tiptap/extension-image'
 import { cn } from '../../lib/cn'
 
 interface RichTextEditorProps {
   value: string
   onChange: (html: string) => void
   placeholder?: string
+}
+
+// Downscale an image file to keep the inline data-URL small enough for the API.
+function fileToScaledDataUrl(file: File, maxW = 800, quality = 0.82): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const img = new window.Image()
+      img.onload = () => {
+        const scale = Math.min(1, maxW / img.width)
+        const w = Math.round(img.width * scale)
+        const h = Math.round(img.height * scale)
+        const canvas = document.createElement('canvas')
+        canvas.width = w
+        canvas.height = h
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return reject(new Error('no canvas'))
+        ctx.drawImage(img, 0, 0, w, h)
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.onerror = reject
+      img.src = reader.result as string
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
 }
 
 function ToolbarButton({
@@ -40,11 +67,14 @@ function ToolbarButton({
 }
 
 export function RichTextEditor({ value, onChange, placeholder = 'Type here' }: RichTextEditorProps) {
+  const fileRef = useRef<HTMLInputElement>(null)
+
   const editor = useEditor({
     extensions: [
       StarterKit,
       Underline,
       Link.configure({ openOnClick: false }),
+      Image.configure({ inline: false }),
       Placeholder.configure({ placeholder }),
     ],
     content: value || '',
@@ -58,7 +88,6 @@ export function RichTextEditor({ value, onChange, placeholder = 'Type here' }: R
     },
   })
 
-  // Sync external value changes (e.g. loading a question for editing / reset).
   useEffect(() => {
     if (!editor) return
     const current = editor.isEmpty ? '' : editor.getHTML()
@@ -81,6 +110,19 @@ export function RichTextEditor({ value, onChange, placeholder = 'Type here' }: R
     editor!.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
   }
 
+  async function onPickImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    try {
+      const src = await fileToScaledDataUrl(file)
+      editor!.chain().focus().setImage({ src }).run()
+    } catch {
+      const url = window.prompt('Image URL')
+      if (url) editor!.chain().focus().setImage({ src: url }).run()
+    }
+  }
+
   return (
     <div className="rounded-lg border-[0.5px] border-gray-400 focus-within:border-primary-400 focus-within:ring-2 focus-within:ring-primary-100">
       <div className="flex flex-wrap items-center gap-1 border-b border-gray-100 px-3 py-1.5">
@@ -100,6 +142,9 @@ export function RichTextEditor({ value, onChange, placeholder = 'Type here' }: R
         <ToolbarButton title="Link" active={editor.isActive('link')} onClick={setLink}>
           🔗
         </ToolbarButton>
+        <ToolbarButton title="Insert image" onClick={() => fileRef.current?.click()}>
+          🖼
+        </ToolbarButton>
         <ToolbarButton title="Quote" active={editor.isActive('blockquote')} onClick={() => editor.chain().focus().toggleBlockquote().run()}>
           ❝
         </ToolbarButton>
@@ -115,6 +160,13 @@ export function RichTextEditor({ value, onChange, placeholder = 'Type here' }: R
         </ToolbarButton>
       </div>
       <EditorContent editor={editor} />
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={onPickImage}
+      />
     </div>
   )
 }

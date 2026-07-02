@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Papa from 'papaparse'
 import { useNavigate, useParams } from 'react-router-dom'
 import { questionSchema } from '../lib/validation'
 import type { QuestionForm } from '../lib/validation'
@@ -34,6 +35,17 @@ const emptyQuestion: QuestionForm = {
   media_url: '',
 }
 
+// Accepts "option2" / "2" / "B" / the option's text and returns "optionN".
+function normalizeCorrect(raw: string, opts: string[]): CorrectOption {
+  const v = (raw ?? '').trim().toLowerCase()
+  const m = v.match(/^option\s*([1-4])$/) || v.match(/^([1-4])$/)
+  if (m) return `option${m[1]}` as CorrectOption
+  if (/^[a-d]$/.test(v)) return `option${'abcd'.indexOf(v) + 1}` as CorrectOption
+  const byText = opts.findIndex((o) => o.trim().toLowerCase() === v)
+  if (byText >= 0) return `option${byText + 1}` as CorrectOption
+  return 'option1'
+}
+
 export function QuestionsPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -47,6 +59,7 @@ export function QuestionsPage() {
   const [items, setItems] = useState<QuestionForm[]>([])
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [saving, setSaving] = useState(false)
+  const csvRef = useRef<HTMLInputElement>(null)
 
   const {
     register,
@@ -78,6 +91,49 @@ export function QuestionsPage() {
     setEditingIndex(index)
   }
 
+  function handleCsv(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    Papa.parse<Record<string, string>>(file, {
+      header: true,
+      skipEmptyLines: true,
+      transformHeader: (h) => h.trim().toLowerCase().replace(/\s+/g, '_'),
+      complete: ({ data }) => {
+        const parsed: QuestionForm[] = []
+        for (const row of data) {
+          const o1 = row.option1 ?? row.a ?? ''
+          const o2 = row.option2 ?? row.b ?? ''
+          const o3 = row.option3 ?? row.c ?? ''
+          const o4 = row.option4 ?? row.d ?? ''
+          const q = row.question ?? ''
+          if (!q || !o1 || !o2 || !o3 || !o4) continue
+          parsed.push({
+            question: q,
+            option1: o1,
+            option2: o2,
+            option3: o3,
+            option4: o4,
+            correct_option: normalizeCorrect(
+              row.correct_option ?? row.correct ?? row.answer ?? 'option1',
+              [o1, o2, o3, o4],
+            ),
+            explanation: row.explanation ?? row.solution ?? '',
+            difficulty: (row.difficulty || 'medium').toLowerCase(),
+            media_url: row.media_url ?? row.image ?? '',
+          })
+        }
+        if (parsed.length === 0) {
+          notify('No valid rows found. Check the CSV columns.', 'error')
+          return
+        }
+        setItems((prev) => [...prev, ...parsed])
+        notify(`Imported ${parsed.length} question${parsed.length > 1 ? 's' : ''} from CSV`, 'success')
+      },
+      error: () => notify('Could not parse the CSV file', 'error'),
+    })
+  }
+
   async function handleSaveAndContinue() {
     if (!id || !test) return
     if (items.length === 0) {
@@ -102,6 +158,7 @@ export function QuestionsPage() {
         correct_option: q.correct_option,
         explanation: q.explanation || undefined,
         difficulty: q.difficulty || undefined,
+        media_url: q.media_url || undefined,
         subject: subjectId,
         test_id: id,
       }))
@@ -175,9 +232,20 @@ export function QuestionsPage() {
           <span className="rounded-lg bg-primary-50 px-3 py-1.5 text-sm font-medium text-primary-700">
             + MCQ
           </span>
-          <span className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-400">
+          <button
+            type="button"
+            onClick={() => csvRef.current?.click()}
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-50"
+          >
             ↥ CSV
-          </span>
+          </button>
+          <input
+            ref={csvRef}
+            type="file"
+            accept=".csv,text/csv"
+            className="hidden"
+            onChange={handleCsv}
+          />
         </div>
       </div>
 
