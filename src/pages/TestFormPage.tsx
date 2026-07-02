@@ -19,9 +19,9 @@ import { cn } from '../lib/cn'
 type Intent = 'draft' | 'next'
 
 const TYPE_TABS = [
-  { value: 'chapterwise', label: 'Chapter Wise' },
-  { value: 'previous_year', label: 'PYQ' },
-  { value: 'mock_test', label: 'Mock Test' },
+  { value: 'chapterwise', label: 'Chapterwise', crumb: 'Chapter Wise' },
+  { value: 'previous_year', label: 'PYQ', crumb: 'PYQ' },
+  { value: 'mock_test', label: 'Mock Test', crumb: 'Mock Test' },
 ]
 
 const DIFFICULTY_RADIOS = [
@@ -58,13 +58,13 @@ function Radio({
     <button type="button" onClick={onChange} className="flex items-center gap-2.5">
       <span
         className={cn(
-          'flex h-5 w-5 items-center justify-center rounded-full border-2',
+          'flex h-6 w-6 items-center justify-center rounded-full border-2',
           checked ? 'border-primary-500' : 'border-gray-300',
         )}
       >
-        {checked && <span className="h-2.5 w-2.5 rounded-full bg-primary-500" />}
+        {checked && <span className="h-3 w-3 rounded-full bg-primary-500" />}
       </span>
-      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-base text-gray-700">{label}</span>
     </button>
   )
 }
@@ -80,7 +80,7 @@ function Stepper({
 }) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-gray-700">{label}</label>
+      <label className="mb-[15px] block text-base font-medium text-gray-700">{label}</label>
       <div className="relative w-full">
         <input
           type="number"
@@ -229,29 +229,29 @@ export function TestFormPage() {
 
   if (isEdit && loadingExisting) return <PageLoader label="Loading test…" />
 
-  const activeTypeLabel =
-    TYPE_TABS.find((t) => t.value === activeType)?.label ?? 'Chapter Wise'
+  const activeTypeCrumb =
+    TYPE_TABS.find((t) => t.value === activeType)?.crumb ?? 'Chapter Wise'
 
   return (
-    <div className="mx-auto max-w-[1200px]">
+    <div className="mx-auto max-w-[1152px]">
       {/* Breadcrumb */}
-      <nav className="mb-6 flex items-center gap-2 text-sm text-gray-400">
+      <nav className="mb-8 flex items-center gap-2 text-base text-gray-500">
         <span>Test Creation</span>
-        <span>/</span>
+        <span className="text-gray-400">/</span>
         <span>{isEdit ? 'Edit Test' : 'Create Test'}</span>
-        <span>/</span>
-        <span className="text-gray-700">{activeTypeLabel}</span>
+        <span className="text-gray-400">/</span>
+        <span className="text-gray-700">{activeTypeCrumb}</span>
       </nav>
 
       {/* Type tabs */}
-      <div className="mb-8 inline-flex rounded-xl border border-gray-200 bg-white p-1">
+      <div className="mb-8 inline-flex h-[50px] items-center gap-2 rounded-xl border-[0.5px] border-gray-300 px-2.5">
         {TYPE_TABS.map((t) => (
           <button
             key={t.value}
             type="button"
             onClick={() => setValue('type', t.value)}
             className={cn(
-              'rounded-lg px-6 py-2 text-sm font-medium transition-colors',
+              'flex h-10 items-center rounded-lg px-4 text-sm font-medium transition-colors',
               activeType === t.value
                 ? 'bg-primary-50 text-primary-700'
                 : 'text-gray-400 hover:text-gray-600',
@@ -263,7 +263,7 @@ export function TestFormPage() {
       </div>
 
       <form>
-        <div className="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-[50px] gap-y-[30px] md:grid-cols-2">
           <Controller
             name="subject"
             control={control}
@@ -349,8 +349,8 @@ export function TestFormPage() {
         </div>
 
         {/* Marking scheme */}
-        <p className="mb-4 mt-8 text-sm font-medium text-gray-800">Marking Scheme:</p>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-5">
+        <p className="mb-6 mt-[30px] text-base font-medium text-gray-700">Marking Scheme:</p>
+        <div className="grid grid-cols-2 gap-x-[50px] gap-y-6 md:grid-cols-5">
           <Controller
             name="wrong_marks"
             control={control}
@@ -395,20 +395,19 @@ export function TestFormPage() {
         </div>
 
         {/* Actions */}
-        <div className="mt-12 flex justify-end gap-4">
-          <Button
+        <div className="mt-[50px] flex justify-end gap-5">
+          <button
             type="button"
-            variant="secondary"
-            className="px-8"
             disabled={savingIntent !== null}
             onClick={() => navigate('/dashboard')}
+            className="h-12 w-40 rounded-lg bg-primary-50 text-base font-medium text-primary-700 hover:bg-primary-100 disabled:opacity-60"
           >
             Cancel
-          </Button>
+          </button>
           <Button
             type="button"
             size="lg"
-            className="px-10"
+            className="w-40"
             loading={savingIntent === 'next'}
             disabled={savingIntent !== null}
             onClick={handleSubmit((v) => onValid(v, 'next'))}
