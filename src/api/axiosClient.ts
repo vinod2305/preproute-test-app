@@ -2,7 +2,9 @@ import axios, { AxiosError } from 'axios'
 import type { ApiResponse } from '../types'
 import { storage } from '../lib/storage'
 
-const baseURL = import.meta.env.VITE_API_BASE_URL as string
+// Defaults to a relative "/api" (proxied to the backend by vite.config.ts in
+// dev and vercel.json in prod), so no env var is required to deploy.
+const baseURL = (import.meta.env.VITE_API_BASE_URL as string) || '/api'
 
 export const apiClient = axios.create({
   baseURL,
