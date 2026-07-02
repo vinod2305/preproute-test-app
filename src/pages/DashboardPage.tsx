@@ -46,8 +46,8 @@ export function DashboardPage() {
     <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Tests</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-2xl font-semibold text-gray-900">Tests</h1>
+          <p className="mt-1 text-sm text-gray-500">
             Create, edit and publish your tests
           </p>
         </div>
@@ -71,7 +71,7 @@ export function DashboardPage() {
                 'rounded-lg px-3 py-2 text-sm font-medium capitalize transition-colors ' +
                 (statusFilter === s
                   ? 'bg-primary-600 text-white'
-                  : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50')
+                  : 'bg-white text-gray-600 ring-1 ring-gray-200 hover:bg-gray-50')
               }
             >
               {s}
@@ -89,8 +89,8 @@ export function DashboardPage() {
       )}
 
       {!isLoading && !isError && filtered.length === 0 && (
-        <div className="rounded-xl border border-dashed border-slate-300 bg-white py-16 text-center">
-          <p className="text-slate-500">No tests found.</p>
+        <div className="rounded-xl border border-dashed border-gray-300 bg-white py-16 text-center">
+          <p className="text-gray-500">No tests found.</p>
           <Button className="mt-4" onClick={() => navigate('/tests/new')}>
             Create your first test
           </Button>
@@ -100,9 +100,9 @@ export function DashboardPage() {
       {!isLoading && !isError && filtered.length > 0 && (
         <>
           {/* Desktop table */}
-          <div className="hidden overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card md:block">
+          <div className="hidden overflow-hidden rounded-xl border border-gray-200 bg-white shadow-card md:block">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="border-b border-gray-200 bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
                 <tr>
                   <th className="px-4 py-3 font-medium">Name</th>
                   <th className="px-4 py-3 font-medium">Subject</th>
@@ -112,18 +112,18 @@ export function DashboardPage() {
                   <th className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-gray-100">
                 {filtered.map((t) => (
-                  <tr key={t.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-slate-900">{t.name}</td>
-                    <td className="px-4 py-3 text-slate-600">{t.subject}</td>
-                    <td className="px-4 py-3 text-slate-600">
+                  <tr key={t.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 font-medium text-gray-900">{t.name}</td>
+                    <td className="px-4 py-3 text-gray-600">{t.subject}</td>
+                    <td className="px-4 py-3 text-gray-600">
                       {t.questions?.length ?? 0}
                     </td>
                     <td className="px-4 py-3">
                       <StatusBadge status={t.status} />
                     </td>
-                    <td className="px-4 py-3 text-slate-500">{formatDate(t.created_at)}</td>
+                    <td className="px-4 py-3 text-gray-500">{formatDate(t.created_at)}</td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
                         <Button
@@ -161,20 +161,20 @@ export function DashboardPage() {
             {filtered.map((t) => (
               <div
                 key={t.id}
-                className="rounded-xl border border-slate-200 bg-white p-4 shadow-card"
+                className="rounded-xl border border-gray-200 bg-white p-4 shadow-card"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className="font-medium text-slate-900">{t.name}</p>
-                    <p className="text-sm text-slate-500">{t.subject}</p>
+                    <p className="font-medium text-gray-900">{t.name}</p>
+                    <p className="text-sm text-gray-500">{t.subject}</p>
                   </div>
                   <StatusBadge status={t.status} />
                 </div>
-                <div className="mt-2 flex items-center gap-4 text-xs text-slate-500">
+                <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
                   <span>{t.questions?.length ?? 0} questions</span>
                   <span>{formatDate(t.created_at)}</span>
                 </div>
-                <div className="mt-3 flex gap-2 border-t border-slate-100 pt-3">
+                <div className="mt-3 flex gap-2 border-t border-gray-100 pt-3">
                   <Button
                     variant="outline"
                     size="sm"
@@ -220,7 +220,7 @@ export function DashboardPage() {
         }
       >
         Are you sure you want to delete{' '}
-        <span className="font-semibold text-slate-900">{toDelete?.name}</span>? This
+        <span className="font-semibold text-gray-900">{toDelete?.name}</span>? This
         action cannot be undone.
       </Modal>
     </div>

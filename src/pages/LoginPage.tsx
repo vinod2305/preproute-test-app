@@ -34,24 +34,31 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-full items-center justify-center bg-slate-50 px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600 text-lg font-bold text-white">
-            P
-          </div>
-          <h1 className="text-2xl font-semibold text-slate-900">Welcome back</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Sign in to manage your tests
-          </p>
-        </div>
+    <div className="flex min-h-screen bg-white p-3">
+      {/* Left illustration panel */}
+      <div className="relative hidden w-1/2 items-center justify-center rounded-2xl bg-primary-50 lg:flex">
+        <img
+          src="/login-illustration.png"
+          alt=""
+          className="w-[70%] max-w-lg"
+        />
+      </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card sm:p-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+      {/* Right form panel */}
+      <div className="flex w-full items-center justify-center rounded-2xl border border-primary-200 px-6 lg:w-1/2 lg:border-l-0">
+        <div className="w-full max-w-[510px]">
+          <img src="/logo.png" alt="PrepRoute" className="mb-10 h-8" />
+
+          <h1 className="text-xl font-semibold text-gray-900">Login</h1>
+          <p className="mt-2 text-sm text-gray-500">
+            Use your company provided Login credentials
+          </p>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5" noValidate>
             <Input
               id="userId"
               label="User ID"
-              placeholder="Enter your user ID"
+              placeholder="Enter User ID"
               autoComplete="username"
               error={errors.userId?.message}
               {...register('userId')}
@@ -60,11 +67,21 @@ export function LoginPage() {
               id="password"
               type="password"
               label="Password"
-              placeholder="Enter your password"
+              placeholder="Enter Password"
               autoComplete="current-password"
               error={errors.password?.message}
               {...register('password')}
             />
+
+            <div className="pt-1">
+              <a
+                href="#"
+                onClick={(e) => e.preventDefault()}
+                className="text-sm font-medium text-primary-700 hover:underline"
+              >
+                Forgot password?
+              </a>
+            </div>
 
             {serverError && (
               <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -72,8 +89,8 @@ export function LoginPage() {
               </div>
             )}
 
-            <Button type="submit" className="w-full" loading={isSubmitting}>
-              Sign In
+            <Button type="submit" size="lg" className="w-full" loading={isSubmitting}>
+              Login
             </Button>
           </form>
         </div>

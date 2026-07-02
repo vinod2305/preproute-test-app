@@ -17,9 +17,10 @@ export default function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/tests/new" element={<TestFormPage />} />
           <Route path="/tests/:id/edit" element={<TestFormPage />} />
-          <Route path="/tests/:id/questions" element={<QuestionsPage />} />
-          <Route path="/tests/:id/preview" element={<PreviewPage />} />
         </Route>
+        {/* Questions & Preview use the question-workspace layout */}
+        <Route path="/tests/:id/questions" element={<QuestionsPage />} />
+        <Route path="/tests/:id/preview" element={<PreviewPage />} />
       </Route>
 
       <Route path="/" element={<Navigate to="/dashboard" replace />} />

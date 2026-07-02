@@ -4,18 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary palette — refined during the design pass
+        // Brand palette — sourced from the Figma design tokens.
         primary: {
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          200: '#c7d2fe',
-          300: '#a5b4fc',
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
+          50: '#f7fbff', // brand semi white
+          100: '#eff5ff',
+          200: '#bfdbfe', // brand semi light
+          300: '#93c5fd',
+          400: '#60a5fa', // brand light
+          500: '#5988ef', // brand primary (buttons)
+          600: '#3f74ec',
+          700: '#1b5def', // brand logo (links / emphasis)
+          800: '#1748bf',
+          900: '#000a3a', // brand very dark logo
         },
       },
       fontFamily: {

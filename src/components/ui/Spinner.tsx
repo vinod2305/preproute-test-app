@@ -13,7 +13,7 @@ export function Spinner({ className }: { className?: string }) {
 
 export function PageLoader({ label = 'Loading…' }: { label?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 py-20 text-slate-500">
+    <div className="flex flex-col items-center justify-center gap-3 py-20 text-gray-500">
       <Spinner className="h-7 w-7" />
       <p className="text-sm">{label}</p>
     </div>

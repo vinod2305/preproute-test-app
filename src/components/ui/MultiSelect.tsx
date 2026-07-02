@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '../../lib/cn'
 import type { SelectOption } from './Select'
+import { ChevronDown } from './icons'
 
 interface MultiSelectProps {
   label?: string
@@ -49,13 +50,13 @@ export function MultiSelect({
           disabled={disabled}
           onClick={() => setOpen((o) => !o)}
           className={cn(
-            'input-base flex min-h-[42px] flex-wrap items-center gap-1.5 text-left',
+            'input-base flex min-h-12 flex-wrap items-center gap-1.5 pr-10 text-left',
             error && 'border-red-400',
-            disabled && 'cursor-not-allowed bg-slate-50',
+            disabled && 'cursor-not-allowed bg-gray-50',
           )}
         >
           {selected.length === 0 ? (
-            <span className="text-slate-400">{placeholder}</span>
+            <span className="text-gray-400">{placeholder}</span>
           ) : (
             selected.map((o) => (
               <span
@@ -77,12 +78,17 @@ export function MultiSelect({
               </span>
             ))
           )}
+          <ChevronDown
+            width={18}
+            height={18}
+            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+          />
         </button>
 
         {open && !disabled && (
-          <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
+          <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
             {options.length === 0 ? (
-              <p className="px-3 py-2 text-sm text-slate-400">{emptyText}</p>
+              <p className="px-3 py-2 text-sm text-gray-400">{emptyText}</p>
             ) : (
               options.map((o) => {
                 const checked = value.includes(o.value)
@@ -91,14 +97,14 @@ export function MultiSelect({
                     type="button"
                     key={o.value}
                     onClick={() => toggle(o.value)}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-slate-50"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-50"
                   >
                     <span
                       className={cn(
                         'flex h-4 w-4 items-center justify-center rounded border',
                         checked
                           ? 'border-primary-600 bg-primary-600 text-white'
-                          : 'border-slate-300',
+                          : 'border-gray-300',
                       )}
                     >
                       {checked && '✓'}

@@ -37,7 +37,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               'rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg',
               t.type === 'success' && 'bg-green-600',
               t.type === 'error' && 'bg-red-600',
-              t.type === 'info' && 'bg-slate-800',
+              t.type === 'info' && 'bg-gray-800',
             )}
           >
             {t.message}

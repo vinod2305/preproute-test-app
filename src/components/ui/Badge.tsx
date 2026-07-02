@@ -5,7 +5,7 @@ import type { TestStatus } from '../../types'
 const statusStyles: Record<string, string> = {
   live: 'bg-green-50 text-green-700 ring-green-600/20',
   draft: 'bg-amber-50 text-amber-700 ring-amber-600/20',
-  default: 'bg-slate-100 text-slate-600 ring-slate-500/20',
+  default: 'bg-gray-100 text-gray-600 ring-gray-500/20',
 }
 
 export function Badge({ children, tone }: { children: ReactNode; tone?: string }) {

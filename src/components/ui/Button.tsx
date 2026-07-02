@@ -13,20 +13,20 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-200 disabled:bg-primary-300',
+    'bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-200 disabled:bg-primary-300',
   secondary:
-    'bg-slate-100 text-slate-800 hover:bg-slate-200 focus:ring-slate-200 disabled:opacity-60',
+    'bg-gray-100 text-gray-800 hover:bg-gray-200 focus:ring-gray-200 disabled:opacity-60',
   outline:
-    'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:ring-slate-200 disabled:opacity-60',
+    'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-200 disabled:opacity-60',
   danger:
     'bg-red-600 text-white hover:bg-red-700 focus:ring-red-200 disabled:bg-red-300',
-  ghost: 'text-slate-600 hover:bg-slate-100 focus:ring-slate-200 disabled:opacity-60',
+  ghost: 'text-gray-600 hover:bg-gray-100 focus:ring-gray-200 disabled:opacity-60',
 }
 
 const sizeClasses: Record<Size, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-sm',
-  lg: 'px-5 py-2.5 text-base',
+  sm: 'h-9 px-3 text-sm',
+  md: 'h-10 px-4 text-sm',
+  lg: 'h-12 px-5 text-base',
 }
 
 export function Button({
