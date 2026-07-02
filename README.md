@@ -16,8 +16,9 @@ Built with React + TypeScript against the Preproute admin API.
   and status filters (All / Draft / Live). View, Edit, and Delete (with confirmation) actions.
 - **Create / Edit Test** — dependent dropdowns (Subject → Topics → Sub-topics), test type, difficulty,
   marking scheme, and structure. Save as draft or continue to questions. Full validation.
-- **Add Questions** — MCQ form with 4 options and a correct-answer picker, optional explanation / difficulty /
-  media URL. Questions collect in an editable list (edit / delete) and are bulk-saved. Minimum one required.
+- **Add Questions** — MCQ form with 4 options and a correct-answer picker, a **rich-text editor** (bold, italic,
+  underline, lists, links, and **inline images**), optional explanation / difficulty. **CSV bulk import** of
+  questions (see `public/sample-questions.csv`). Questions collect in an editable list and are bulk-saved.
 - **Preview & Publish** — full test overview with every question and the correct answer highlighted; publish
   flips the test to `live` and returns to the dashboard.
 
