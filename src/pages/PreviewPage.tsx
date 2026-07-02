@@ -117,9 +117,13 @@ export function PreviewPage() {
         <ol className="space-y-3">
           {questions?.map((q, i) => (
             <li key={q.id ?? i} className="rounded-lg border border-gray-200 p-4">
-              <p className="font-medium text-gray-900">
-                {i + 1}. {q.question}
-              </p>
+              <div className="flex gap-1.5 font-medium text-gray-900">
+                <span>{i + 1}.</span>
+                <div
+                  className="question-html"
+                  dangerouslySetInnerHTML={{ __html: q.question }}
+                />
+              </div>
               <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {OPTION_KEYS.map((key, idx) => {
                   const isCorrect = q.correct_option === key

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useParams } from 'react-router-dom'
 import { questionSchema } from '../lib/validation'
@@ -18,6 +18,7 @@ import { cn } from '../lib/cn'
 import { Workspace, QuestionPanel } from '../components/layout/Workspace'
 import { TrashIcon } from '../components/ui/icons'
 import { TestSummaryCard } from '../components/TestSummaryCard'
+import { RichTextEditor } from '../components/ui/RichTextEditor'
 
 const OPTION_KEYS = ['option1', 'option2', 'option3', 'option4'] as const
 
@@ -32,8 +33,6 @@ const emptyQuestion: QuestionForm = {
   difficulty: 'medium',
   media_url: '',
 }
-
-const TOOLBAR = ['B', 'I', 'U', 'S', '🔗', '“', '≡', '•', '—', '𝑥']
 
 export function QuestionsPage() {
   const { id } = useParams<{ id: string }>()
@@ -55,6 +54,7 @@ export function QuestionsPage() {
     reset,
     watch,
     setValue,
+    control,
     formState: { errors },
   } = useForm<QuestionForm>({
     resolver: zodResolver(questionSchema),
@@ -194,21 +194,14 @@ export function QuestionsPage() {
       )}
 
       <form onSubmit={handleSubmit(onAdd)}>
-        {/* Editor */}
-        <div className="rounded-lg border border-gray-200">
-          <div className="flex flex-wrap items-center gap-3 border-b border-gray-100 px-4 py-2 text-sm text-gray-400">
-            {TOOLBAR.map((t, i) => (
-              <span key={i} className="cursor-default select-none">
-                {t}
-              </span>
-            ))}
-          </div>
-          <textarea
-            {...register('question')}
-            placeholder="Type here"
-            className="min-h-[120px] w-full resize-y rounded-b-lg px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
-          />
-        </div>
+        {/* Rich-text question editor */}
+        <Controller
+          name="question"
+          control={control}
+          render={({ field }) => (
+            <RichTextEditor value={field.value} onChange={field.onChange} placeholder="Type here" />
+          )}
+        />
         {errors.question && (
           <p className="mt-1 text-xs text-red-600">{errors.question.message}</p>
         )}

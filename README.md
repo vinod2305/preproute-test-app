@@ -31,6 +31,7 @@ Built with React + TypeScript against the Preproute admin API.
 | Auth state | React Context + `localStorage` |
 | HTTP | Axios with interceptors |
 | Forms & validation | React Hook Form + Zod |
+| Rich text | TipTap (question editor: bold/italic/underline/lists/links) |
 | Styling | Tailwind CSS |
 | Deployment | Vercel |
 

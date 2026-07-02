@@ -27,3 +27,42 @@
     @apply mb-[15px] block text-base font-medium text-gray-700;
   }
 }
+
+/* Rich-text content (editor + rendered question HTML) */
+.prose-editor:focus,
+.question-html {
+  outline: none;
+}
+.prose-editor p,
+.question-html p {
+  margin: 0 0 0.25rem;
+}
+.prose-editor ul,
+.question-html ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.prose-editor ol,
+.question-html ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.prose-editor blockquote,
+.question-html blockquote {
+  border-left: 3px solid theme('colors.gray.300');
+  padding-left: 0.75rem;
+  color: theme('colors.gray.500');
+}
+.prose-editor a,
+.question-html a {
+  color: theme('colors.primary.700');
+  text-decoration: underline;
+}
+/* Placeholder for empty editor */
+.prose-editor p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: theme('colors.gray.300');
+  pointer-events: none;
+  height: 0;
+}
